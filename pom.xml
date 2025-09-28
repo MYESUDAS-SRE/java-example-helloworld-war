@@ -5,11 +5,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.example</groupId>
-    <artifactId>java-example-helloworld-war</artifactId>
+    <artifactId>helloworld</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>war</packaging>
 
-    <name>java-example-helloworld-war</name>
+    <name>helloworld</name>
 
     <properties>
         <maven.compiler.source>11</maven.compiler.source>
@@ -36,7 +36,7 @@
     </dependencies>
 
     <build>
-        <finalName>java-example-helloworld-war</finalName>
+        <finalName>helloworld</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
