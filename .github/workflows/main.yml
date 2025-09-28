@@ -36,7 +36,7 @@ jobs:
           host: ${{ secrets.JBOSS1 }}
           username: ec2-user
           key: ${{ secrets.EC2_KEY }}
-          source: target/sample-app.war
+          source: target/java-example-helloworld-war.war
           target: /tmp/target/
       - name: Deploy WAR on JBoss1
         uses: appleboy/ssh-action@v1.2.0
@@ -52,8 +52,8 @@ jobs:
                 > /opt/wildfly/wildfly.log 2>&1 &
               sleep 20
             fi
-            sudo rm -rf /opt/wildfly/standalone/deployments/*.war*
-            sudo cp $WAR_FILE /opt/wildfly/standalone/deployments/
-            sudo chown wildfly:wildfly /opt/wildfly/standalone/deployments/*.war
-            sudo -u wildfly touch /opt/wildfly/standalone/deployments/*.war.dodeploy
-            tail -n 20 /opt/wild
+            sudo rm -rf /opt/wildfly/standalone/java-example-helloworld-war.war*
+            sudo cp /tmp/target/java-example-helloworld-war.war /opt/wildfly/standalone/deployments/
+            sudo chown wildfly:wildfly /opt/wildfly/standalone/deployments/java-example-helloworld-war.war
+            sudo -u wildfly touch /opt/wildfly/standalone/deployments/java-example-helloworld-war.war.dodeploy
+            tail -n 20 /opt/wildfly/wildfly.log
