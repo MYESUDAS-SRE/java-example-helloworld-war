@@ -22,7 +22,7 @@ jobs:
           java-version: 17
 
       # 3. Build WAR with Maven
-        - name: Build WAR
+      - name: Build WAR
         run: mvn clean package -DskipTests
 
       # 4. Verify WAR exists
@@ -53,7 +53,7 @@ jobs:
               sleep 20
             fi
             sudo rm -rf /opt/wildfly/standalone/deployments/helloworld.war*
-            sudo cp /tmp/target/helloworld.war /opt/wildfly/standalone/deployments/
+            sudo cp /tmp/helloworld.war /opt/wildfly/standalone/deployments/
             sudo chown wildfly:wildfly /opt/wildfly/standalone/deployments/helloworld.war
             sudo -u wildfly touch /opt/wildfly/standalone/deployments/helloworld.war.dodeploy
             tail -n 20 /opt/wildfly/wildfly.log
@@ -82,7 +82,7 @@ jobs:
               sleep 20
             fi
             sudo rm -rf /opt/wildfly/standalone/deployments/helloworld.war*
-            sudo cp /tmp/target/helloworld.war /opt/wildfly/standalone/deployments/
+            sudo cp /tmp/helloworld.war /opt/wildfly/standalone/deployments/
             sudo chown wildfly:wildfly /opt/wildfly/standalone/deployments/helloworld.war
             sudo -u wildfly touch /opt/wildfly/standalone/deployments/helloworld.war.dodeploy
             tail -n 20 /opt/wildfly/wildfly.log
