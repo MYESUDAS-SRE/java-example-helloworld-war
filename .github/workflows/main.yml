@@ -37,7 +37,8 @@ jobs:
           username: ec2-user
           key: ${{ secrets.EC2_KEY }}
           source: target/java-example-helloworld-war.war
-          target: /tmp/target/
+          target: /tmp
+
       - name: Deploy WAR on JBoss1
         uses: appleboy/ssh-action@v1.2.0
         with:
@@ -46,13 +47,41 @@ jobs:
           key: ${{ secrets.EC2_KEY }}
           script: |
             echo "===== JBoss1 Deployment ====="
-            WAR_FILE=$(ls /tmp/target/*.war | head -n 1)
             if ! pgrep -u wildfly -f "wildfly" > /dev/null; then
               sudo -u wildfly nohup /opt/wildfly/bin/standalone.sh -b 0.0.0.0 \
                 > /opt/wildfly/wildfly.log 2>&1 &
               sleep 20
             fi
-            sudo rm -rf /opt/wildfly/standalone/java-example-helloworld-war.war*
+            sudo rm -rf /opt/wildfly/standalone/deployments/java-example-helloworld-war.war*
+            sudo cp /tmp/target/java-example-helloworld-war.war /opt/wildfly/standalone/deployments/
+            sudo chown wildfly:wildfly /opt/wildfly/standalone/deployments/java-example-helloworld-war.war
+            sudo -u wildfly touch /opt/wildfly/standalone/deployments/java-example-helloworld-war.war.dodeploy
+            tail -n 20 /opt/wildfly/wildfly.log
+
+      # 6. Upload WAR to JBoss2
+      - name: Upload WAR to JBoss2
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.JBOSS2 }}
+          username: ec2-user
+          key: ${{ secrets.EC2_KEY }}
+          source: target/java-example-helloworld-war.war
+          target: /tmp
+
+      - name: Deploy WAR on JBoss2
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.JBOSS2 }}
+          username: ec2-user
+          key: ${{ secrets.EC2_KEY }}
+          script: |
+            echo "===== JBoss2 Deployment ====="
+            if ! pgrep -u wildfly -f "wildfly" > /dev/null; then
+              sudo -u wildfly nohup /opt/wildfly/bin/standalone.sh -b 0.0.0.0 \
+                > /opt/wildfly/wildfly.log 2>&1 &
+              sleep 20
+            fi
+            sudo rm -rf /opt/wildfly/standalone/deployments/java-example-helloworld-war.war*
             sudo cp /tmp/target/java-example-helloworld-war.war /opt/wildfly/standalone/deployments/
             sudo chown wildfly:wildfly /opt/wildfly/standalone/deployments/java-example-helloworld-war.war
             sudo -u wildfly touch /opt/wildfly/standalone/deployments/java-example-helloworld-war.war.dodeploy
