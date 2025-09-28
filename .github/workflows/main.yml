@@ -22,7 +22,7 @@ jobs:
           java-version: 17
 
       # 3. Build WAR with Maven
-	  - name: Build WAR
+        - name: Build WAR
         run: mvn clean package -DskipTests
 
       # 4. Verify WAR exists
