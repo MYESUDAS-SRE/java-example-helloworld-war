@@ -22,12 +22,12 @@ jobs:
           java-version: 17
 
       # 3. Build WAR with Maven
-      - name: Build WAR
-        run: jar cvf helloworld.war WEB-INF
+	  - name: Build WAR
+        run: mvn clean package -DskipTests
 
       # 4. Verify WAR exists
       - name: Verify WAR built
-        run: ls helloworld.war
+        run: ls target/helloworld.war
 
       # 5. Upload WAR to JBoss1
       - name: Upload WAR to JBoss1
